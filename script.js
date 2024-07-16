@@ -41,7 +41,7 @@ const questions = [
     question: "Which is the smallest country in the world",
     answers: [
       { text: "Vatican City", correct: true },
-      { text: "Bhutan", correct: true },
+      { text: "Bhutan", correct: false },
       { text: "Nepal", correct: false },
       { text: "Sri Lanka", correct: false },
     ],
@@ -79,9 +79,11 @@ function selectAnswer(e) {
   const isCorrect = selectedBtn.dataset.correct === "true";
   if (isCorrect) {
     selectedBtn.classList.add("correct");
+    score++;
   } else {
     selectedBtn.classList.add("incorrect");
   }
+
   Array.from(answerBtns.children).forEach((button) => {
     if (button.dataset.correct === "true") {
       button.classList.add("correct");
@@ -90,17 +92,17 @@ function selectAnswer(e) {
     button.disabled = true;
   });
 
-  //==== code to make all wrong answers red ====
-  //selectedBtn.classList.add("selected")
-  // Array.from(answerBtns.children).forEach(button => {
-  //     console.log("button ",button)
-  //     if(button.dataset.correct === "true"){
-  //         button.classList.add("correct")
-  //         return;
-  //     }
-  //     button.classList.add("incorrect")
-  //     button.disabled = true;
-  // });
+/*   ==== code to make all wrong answers red ====
+  selectedBtn.classList.add("selected")
+  Array.from(answerBtns.children).forEach(button => {
+      console.log("button ",button)
+      if(button.dataset.correct === "true"){
+          button.classList.add("correct")
+          return;
+      }
+      button.classList.add("incorrect")
+      button.disabled = true;
+  }); */
 
   nextBtn.style.display = "block";
 }
@@ -112,4 +114,28 @@ function startquiz() {
   showQuestions();
 }
 
+function showScore(){
+  resetState();
+  questionElement.innerHTML = `Your score is ${score} / ${questions.length} !!`
+  nextBtn.innerHTML = "Play Again"
+  nextBtn.style.display = "block"
+}
+
+function nextBtnHandler(){
+  currentQuestionIndex++;
+  if(currentQuestionIndex < questions.length){
+    showQuestions()
+  }else{
+    showScore()
+  }
+}
+
+nextBtn.addEventListener('click',()=>{
+  if(currentQuestionIndex < questions.length){
+    nextBtnHandler()
+  }else{
+    startquiz();
+  }
+
+})
 startquiz();
